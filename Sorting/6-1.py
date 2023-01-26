@@ -61,10 +61,66 @@ def insertion_sort(array):
                 break
     print(array)
 
-insertion_sort(example)
+# insertion_sort(example)
 
 # 퀵 정렬 (Quick Sort)
 
 # 퀵 정렬은 정렬 알고리즘 중 가장 많이 사용되는 알고리즘이다.
 # 퀵 정렬과 비교해 빠른 알고리즘은 병합 정렬 알고리즘이 있다. 이 두 알고리즘은 정렬 라이브러리의 근간이 되는 알고리즘이다.
-# 퀵 정렬은 기준 데이터(Pivot)를 설정하고 그 기준보다 큰 데이터와 작은 데이터의 위치를 바꾸는 것이다. 
+# 퀵 정렬은 기준 데이터(Pivot)를 설정하고 그 기준보다 큰 데이터와 작은 데이터의 위치를 바꾸는 것이다.
+# 기준 데이터는 보통 리스트의 첫 번째 데이터로 정한다. 그리고 나머지 리스트들을 왼쪽과 오른쪽에서 각각 찾는다
+# 왼쪽에서는 Pivot보다 큰 데이터를 찾는다. 반대로 오른쪽에서는 Pivot보다 작은 데이터를 찾는다.
+# 양쪽에서 조건에 맞는 데이터를 찾으면 서로 위치를 교환하고, 다시 데이터를 찾는다.
+# 이렇게 데이터를 찾다가 찾는 값의 위치가 서로 엇갈리면 작은 데이터와 피벗의 위치를 교환한다.
+# 이러면 피벗의 기준으로 왼쪽은 작은 값만 오른 쪽은 큰 값만 놓여있게 된다.
+# 이를 양 쪽에서 반복해서 정렬해 나가는 것이 퀵 정렬이다.
+# 퀵 정렬의 시간 복잡도
+# 선택 정렬과 삽입 정렬은 최악의 경우에도 시간 복잡도가 O(n^2) 이다.
+# 하지만 퀵 정렬의 평균 시간 복잡도는 O(N log N)이다. 앞에 두 정렬 알고리즘에 비해서는 빠른 편이다.
+# 다만 최악의 경우 시간 복잡도가 O(n^2)이다.
+# 데이터가 무작위로 입력되는 경우 퀵 정렬은 빠르게 동작할 확률이 높다. 
+# 하지만 이 책에서의 퀵 정렬처럼 리스트의 가장 왼쪽 데이터를 피벗으로 삼을때, 데이터가 이미 정렬된 경우는 매우 느리게 동작한다.
+
+
+def quick_sort(array,start, end):
+    if start >= end: # 원소가 1개인 경우 종료
+        return
+    pivot = start # 기준 데이터 설정
+    left = start+1
+    right = end
+    while left <= right:
+        # 왼쪽에서 피벗보다 큰 데이터를 찾을 때까지 반복
+        while left <= end and array[left] <= array[pivot]:
+            left +=1
+        # 오른쪽에서 피벗보다 작은 데이터를 찾을 때까지 반복
+        while right > start and array[right] >= array[pivot]:
+            right -=1
+        # 왼쪽과 오른쪽에서 찾다가 서로 엇갈리게 되면
+        if left > right:
+            # 작은 값과 피벗 테이블 교환
+            array[right],array[pivot]=array[pivot],array[right]
+        else:
+            array[left],array[right] = array[right],array[left]
+    # 분할 이후 왼쪽과 오른쪽 부분에서 각각 정렬 수행
+    quick_sort(array,start,right-1) # 왼쪽
+    quick_sort(array,right+1,end)   # 오른쪽
+    
+# quick_sort(example,0,len(example)-1)
+# print(example)
+
+# 파이썬의 장점을 살려서 짧게 작성한 코드
+# 비교 연산 횟수가 증가해 시간 면에서는 조금 비효율적이다.
+def quick_sort2(array):
+    # 원소가 하나 이하면 종료
+    if len(array) <=1:
+        return array
+    
+    pivot= array[0] # 피벗
+    tail = array[1:] # 피벗을 제외한 리스트
+
+    left_side=[x for x in tail if x <= pivot]   # 분할 왼쪽
+    right_side=[x for x in tail if x >pivot]    # 분할 오른쪽
+
+    # 분할 이후 왼쪽과 오른쪽 부분에서 각각 정렬 수행, 전체 리스트 반환
+    return quick_sort2(left_side)+[pivot]+quick_sort2(right_side)
+print(quick_sort2(example))
