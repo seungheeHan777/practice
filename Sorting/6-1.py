@@ -6,7 +6,7 @@
 # 따라서 (n-1)+(n-2)+...(n-i)+...2+1=(n-1)*n/2 라는 연산 횟수가 나온다.
 # 이를 시간 복잡도로 표현하면 O(n^2) 이다.
 
-example=[7,5,9,0,3,1,6,2,4,8]
+example=[7,5,9,0,3,1,6,2,4,8,0,0]
 def selection_sort(array):
     # 선택 정렬 (Selection Sort)
 
@@ -82,7 +82,11 @@ def insertion_sort(array):
 # 하지만 이 책에서의 퀵 정렬처럼 리스트의 가장 왼쪽 데이터를 피벗으로 삼을때, 데이터가 이미 정렬된 경우는 매우 느리게 동작한다.
 
 
+
+
 def quick_sort(array,start, end):
+
+    
     if start >= end: # 원소가 1개인 경우 종료
         return
     pivot = start # 기준 데이터 설정
@@ -123,4 +127,34 @@ def quick_sort2(array):
 
     # 분할 이후 왼쪽과 오른쪽 부분에서 각각 정렬 수행, 전체 리스트 반환
     return quick_sort2(left_side)+[pivot]+quick_sort2(right_side)
-print(quick_sort2(example))
+# print(quick_sort2(example))
+
+# 계수 정렬(Count Sort)
+
+# 특정 조건이 부합할 떄만 사용할 수 있지만 매우 빠른 정렬 알고리즘
+
+# if 모든 데이터가 양의 정수, 개수가 N, 최댓값이 K 라고 할 때,
+# 최악의 경우에도 O(N+K)
+# 동작원리도 간단하지만 데이터의 크기 법위가 제한되어 정수 형태로 표현할 때만 사용가능함
+# 실수형 데이터는 게수 정렬이 어려움
+# 계수 정렬은 모든 범위를 담는 크기의 리스트를 선언함
+def count_sort(array):
+    # 계수 정렬(Count Sort)
+
+# 특정 조건이 부합할 떄만 사용할 수 있지만 매우 빠른 정렬 알고리즘
+
+# if 모든 데이터가 양의 정수, 개수가 N, 최댓값이 K 라고 할 때,
+# 최악의 경우에도 O(N+K)
+# 동작원리도 간단하지만 데이터의 크기 법위가 제한되어 정수 형태로 표현할 때만 사용가능함
+# 실수형 데이터는 게수 정렬이 어려움
+# 계수 정렬은 모든 범위를 담는 크기의 리스트를 선언함
+    count=[0]*(max(array)+1)
+
+    for i in range(len(array)):
+        count[array[i]] += 1
+
+    for i in range(len(count)):
+        for j in range(count[i]):
+            print(i, end=' ')
+
+count_sort(example)
