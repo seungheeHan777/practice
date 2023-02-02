@@ -17,34 +17,107 @@
 n,m=map(int,input().split())
 board=[list(input()) for i in range(n)]
 count=0
-# 상,하,좌,우 방향
-move=[[-1,0],[1,0],[0,-1],[0,1]]    
-while count>=10:
-    # R,B 위치 찾기
+dcount=0
+# 좌,우 ,상,하 방향
+moves=[[-1,0],[1,0],[0,-1],[0,1]]
+def find():
+    global rx,ry,bx,by,ox,oy
+    # R,B,O 위치 찾기
     for i in range(n):
         for j in range(m):
             if board[i][j] == 'R':
                 rx,ry=i,j
-            if board[i][j] == 'B':
+            elif board[i][j] == 'B':
                 bx,by=i,j
-    for i in range(len(move)):
-        # 장애물이 있을 때
-        if board[rx+move[i][0]][ry+move[i][1]]=='#':
-            board[rx][ry]=board[rx][ry]
-        # 빈 공간일 때
-        elif board[rx+move[i][0]][ry+move[i][1]]=='.':
-            board[rx][ry],board[rx-move[i][0]][ry-move[i][1]]=board[rx-move[i][0]][ry-move[i][1]],board[rx][ry]
+            elif board[i][j] == 'O':
+                ox,oy=i,j
+
+def moving(move_index):
+    global char,rx,ry,count,dcount
+    char=board[rx+moves[move_index][0]][ry+moves[move_index][1]]
+    if char=='O':
+            # 문자열 위치 바꾸기
+            board[rx][ry]=board[rx+moves[move_index][0]][ry+moves[move_index][1]]
+            # R의 좌표 바꾸기
+            rx+=moves[move_index][0]
+            ry+=moves[move_index][1]
+            
+            if board[rx][ry]=='O':
+                count+=1
+                print(count)
+    elif char=='.':
+        board[rx][ry],board[rx+moves[move_index][0]][ry+moves[move_index][1]]=board[rx+moves[move_index][0]][ry+moves[move_index][1]],board[rx][ry]
+        # R의 좌표 바꾸기
+        rx+=moves[move_index][0]
+        ry+=moves[move_index][1]
+        moving(move_index)
+        if char=='#':
             count+=1
-        # 탈출하면 종료
-        elif board[rx+move[i][0]][ry+move[i][1]]=='O':
-            board[rx][ry]=board[rx-move[i][0]][ry-move[i][1]]
-            count+=1
-            print(count)
-            break
-        # 파란 공 제어
-        if board[bx+move[i][0]][by+move[i][1]]=='O':
-            board[bx][by]=board[bx][by]
-        elif board[bx+move[i][0]][by+move[i][1]]=='.':
-            board[bx][by],board[bx+move[i][0]][by+move[i][1]]=board[bx+move[i][0]][by+move[i][1]],board[bx][by]
-if count>=10:
-    print(-1)
+    elif char=='#':
+        rx=rx
+        ry=ry
+        dcount+=1
+while True:
+    find()
+    # R과 O의 거리 차이
+    dx,dy=ox-rx,oy-ry
+    
+    if count>10:
+        print(-1)
+        break
+    if board[rx][ry]==board[ox][oy]:
+        break
+    if dx<0:
+        move_index=0
+        if dcount==2:
+            move_index=2
+        elif dcount>=3:
+            move_index=3
+        moving(move_index)
+    elif dx>0:
+        move_index=1
+        if dcount==2:
+            move_index=2
+        elif dcount>=3:
+            move_index=3
+        moving(move_index)
+    if dy<0:
+        move_index=2
+        if dcount==2:
+            move_index=0
+        elif dcount>=3:
+            move_index=1
+        moving(move_index)
+    elif dy>0:
+        move_index=3
+        if dcount==2:
+            move_index=0
+        elif dcount>=3:
+            move_index=1
+        moving(move_index)
+    
+
+
+    
+    # for i in range(len(move)):
+    #     # 장애물이 있을 때
+    #     if board[rx+move[i][0]][ry+move[i][1]]=='#':
+    #         board[rx][ry]=board[rx][ry]
+    #     # 빈 공간일 때
+    #     elif board[rx+move[i][0]][ry+move[i][1]]=='.':
+    #         board[rx][ry],board[rx+move[i][0]][ry+move[i][1]]=board[rx+move[i][0]][ry+move[i][1]],board[rx][ry]
+    #         count+=1
+    #         if count>=10:
+    #             print(-1)
+    #             break
+    #     # 탈출하면 종료
+    #     elif board[rx+move[i][0]][ry+move[i][1]]=='O':
+    #         board[rx][ry]=board[rx+move[i][0]][ry+move[i][1]]
+    #         count+=1
+    #         print(count)
+    #         break
+    #     # 파란 공 제어
+    #     if board[bx+move[i][0]][by+move[i][1]]=='O':
+    #         board[bx][by]=board[bx][by]
+    #     elif board[bx+move[i][0]][by+move[i][1]]=='.':
+    #         board[bx][by],board[bx+move[i][0]][by+move[i][1]]=board[bx+move[i][0]][by+move[i][1]],board[bx][by]
