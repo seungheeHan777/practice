@@ -10,6 +10,6 @@ m=int(sys.stdin.readline().rstrip())
 array2=list(map(int,sys.stdin.readline().split()))
 for i in array2:
     if array[i]==1:
-        print("no",end=' ')
-    else:
         print("yes",end=' ')
+    else:
+        print("no",end=' ')
