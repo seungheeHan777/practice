@@ -10,31 +10,21 @@
 # 연산을 사용하는 횟수의 최솟값을 출력하라.
 
 import sys
+# x 값 입력
 x=int(sys.stdin.readline())
-def a():
-    global x,count
-    x/=5
-    count+=1
-def b():
-    global x,count
-    x/=3
-    count+=1
-def c():
-    global x,count
-    x/=2
-    count+=1
-def d():
-    global x,count
-    x-=1
-    count+=1
-count=0
-while x>1:
-    if x%5==0:
-        a()
-    elif x%3==0:
-        b()
-    elif x%2==0:
-        c()
-    else :
-        d()
-print(count)
+# arr 리스트를 선언
+arr=[0]*(x+1)
+
+# 이 문제를 점화식으로 나타내보자면,
+# arr[x]=min(arr[x-1],arr[x//2],arr[x//3],arr[x//5]) 이다
+# 이는 다이나믹 프로그래밍에서 Bottom-Up 방식을 이용해 구현하면
+# 반복문을 사용해서 arr[i]에 값을 저장해서 점점 x에 다가가는 방식이다.
+for i in range(2,x+1):
+    arr[i]=arr[i-1]+1
+    if i%2==0:
+        arr[i]=min(arr[i],arr[i//2]+1)
+    if i%3==0:
+        arr[i]=min(arr[i],arr[i//3]+1)
+    if i%5==0:
+        arr[i]=min(arr[i],arr[i//5]+1)
+print(arr[x])
